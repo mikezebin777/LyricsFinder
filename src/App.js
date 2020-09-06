@@ -1,12 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import Navbar from './components/layout/Navbar';
+import UserItem from './components/users/UserItem';
 import './App.css';
 
 class App extends Component {
   render() {
     return (
-      <div className='App'>
-        <h1>Lyrics Finder</h1>
-      </div>
+      <Fragment>
+        <Navbar />
+        <UserItem />
+      </Fragment>
     );
   }
 }
