@@ -1,6 +1,6 @@
-# Github Finder
+# Lyrics Finder
 
-> React app to search Github profiles. This app uses the Context API along with the useContext and useReducer hooks for state management and is part of the "Modern React Front To Back" Udemy course
+> React app to search Lyrics. Help a certain group of people to QUICKLY Search lyrics, and VIEW the details of a lyric.
 
 ## Usage
 
