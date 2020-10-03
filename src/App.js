@@ -11,6 +11,7 @@ import './App.css';
 
 class App extends Component {
   state = {
+    keyword: '',
     users: [],
     user: {},
     repos: [],
@@ -35,6 +36,7 @@ class App extends Component {
   searchUsers = async (text) => {
     // console.log(text);
     this.setState({
+      keyword: text,
       loading: true,
     });
 
