@@ -1,6 +1,6 @@
 # Lyrics Finder
 
-> React app to search Lyrics. Help a certain group of people to QUICKLY Search lyrics, and VIEW the details of a lyric.
+> React app to search Lyrics. Help a certain group of people to QUICKLY Search lyrics, and VIEW the details of a lyric. (Use Hooks)
 
 ## Usage
 

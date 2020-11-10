@@ -11,6 +11,9 @@ const Navbar = ({ title }) => {
           <Link to='/'>Home</Link>
         </li>
         <li>
+          <Link to='/search'>Search</Link>
+        </li>
+        <li>
           <Link to='/about'>About</Link>
         </li>
       </ul>
@@ -19,7 +22,7 @@ const Navbar = ({ title }) => {
 };
 
 Navbar.defaultProps = {
-  title: 'Lyrics Finder',
+  title: 'Songs Finder',
 };
 
 Navbar.propTypes = {
