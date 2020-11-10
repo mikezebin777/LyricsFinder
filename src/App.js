@@ -1,154 +1,86 @@
 import React, { Component, Fragment } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
-import Users from './components/users/Users';
-import User from './components/users/User';
-import Search from './components/users/Search';
+import Indices from './components/indices/Indices';
+
+import Songs from './components/songs/Songs';
+// import User from './components/users/User';
+import Search from './components/songs/Search';
 import Alert from './components/layout/Alert';
 import About from './components/pages/About';
-import axios from 'axios';
+import { filterByKeyword } from "./functions/search";
+
+import OurSongs from './songData'; // Sample data of the Songs
 import './App.css';
 
 class App extends Component {
   state = {
     keyword: '',
-    users: [],
-    user: {},
-    repos: [],
+    songs: OurSongs,
+    indexedSongs: OurSongs,
+    filteredSongs: OurSongs,
+
     loading: false,
     alert: null,
+    selectedIndex: '',
   };
 
-  async componentDidMount() {
-    // this.setState({
-    //   loading: true,
-    // });
-    // const res = await axios.get(
-    //   `http://api.github.com/users?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
-    // );
-    // this.setState({
-    //   users: res.data,
-    //   loading: false,
-    // });
+  setIndex = (index) => {
+
+    let {selectedIndex} = this.state;
+
+    console.log(`set ${index}`);
+
+    // 如果点击的已经备选中了， 就清除选中。
+    selectedIndex = selectedIndex === index ? '' : index;
+
+    // 找出索引的曲目
+    const indexedSongs = selectedIndex === '' ? OurSongs : 
+    OurSongs.filter(song => song.index === selectedIndex);
+
+    this.setState({
+      selectedIndex,
+      indexedSongs
+    })
   }
 
-  // Search Github Users
-  searchUsers = async (text) => {
-    // console.log(text);
-    this.setState({
-      keyword: text,
-      loading: true,
-    });
-
-    const res = await axios.get(
-      `http://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
-    );
-
-    this.setState({
-      users: res.data.items,
-      loading: false,
-    });
-  };
-
-  // Get a single Github user
-  getUser = async (username) => {
-    this.setState({
-      loading: true,
-    });
-
-    const res = await axios.get(
-      `http://api.github.com/users/${username}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
-    );
-
-    this.setState({
-      user: res.data,
-      loading: false,
-    });
-  };
-
-  // Get user repos
-  getUserRepos = async (username) => {
-    this.setState({
-      loading: true,
-    });
-
-    const res = await axios.get(
-      `http://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
-    );
-
-    this.setState({
-      repos: res.data,
-      loading: false,
-    });
-  };
-
-  // Clear users from state
-  clearUsers = () => {
-    this.setState({
-      users: [],
-      loading: false,
-    });
-  };
-
-  // Set Alert
-  setAlert = (msg, type) => {
-    this.setState({
-      alert: {
-        msg,
-        type,
-      },
-    });
-
-    setTimeout(() => {
-      this.setState({
-        alert: null,
-      });
-    }, 3000);
-  };
+  // Search songs
+  searchSongs = key => {
+    const filtered = filterByKeyword(key, OurSongs);
+    // const filtered = filterByKeyword('天父', OurSongs);
+    this.setState({filteredSongs : filtered})
+  }
 
   render() {
-    const { users, loading, alert, user, repos } = this.state;
-
+    const { loading, selectedIndex, songs, indexedSongs, filteredSongs } = this.state;
+    
     return (
       <Router>
-        <Fragment>
-          <Navbar />
-          <div className='container'>
-            <Alert alert={alert} />
-            <Switch>
-              <Route
-                exact
-                path='/'
-                render={(props) => (
-                  <Fragment>
-                    <Search
-                      searchUsers={this.searchUsers}
-                      clearUsers={this.clearUsers}
-                      showClear={users.length > 0 ? true : false}
-                      setAlert={this.setAlert}
-                    />
-                    <Users loading={loading} users={users} />
-                  </Fragment>
-                )}
-              />
-              <Route exact path='/about' component={About} />
-              <Route
-                exact
-                path='/user/:login'
-                render={(props) => (
-                  <User
-                    {...props}
-                    getUser={this.getUser}
-                    getUserRepos={this.getUserRepos}
-                    user={user}
-                    repos={repos}
-                    loading={loading}
-                  />
-                )}
-              />
-            </Switch>
-          </div>
-        </Fragment>
+        <Navbar />
+        <div className='container'>
+          <Switch>
+            {/* 索引页/Index */}
+            <Route exact path='/' render={props => (
+              <Fragment>
+                <Indices selectedIndex={selectedIndex} 
+                         setIndex={this.setIndex}/>
+                <Songs  songs = {indexedSongs} 
+                        loading= {loading} />
+              </Fragment>
+            )} />
+            {/* 搜索页/Search */}
+            <Route exact path='/search' render={props => (
+              <Fragment>
+                <Search searchSongs={this.searchSongs} />
+                {/* <Songs  songs = {filterByKeyword("喜乐", songs)}  */}
+                <Songs  songs = {filteredSongs} 
+                        loading= {loading} />
+                {/* <button onClick={this.searchSongs} >filter songs</button> */}
+              </Fragment>
+            )} />
+            <Route exact path='/about' component={About} />
+          </Switch>
+        </div>
       </Router>
     );
   }

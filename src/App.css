@@ -111,6 +111,9 @@ img {
 
 /* Cards */
 .card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 1rem;
   border: #ccc 1px dotted;
   margin: 0.7rem 0;
@@ -188,6 +191,7 @@ img {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 1rem;
+  align-items: center;
 }
 
 .grid-4 {
@@ -305,6 +309,16 @@ img {
 
 .round-img {
   border-radius: 50%;
+  margin: 0 1rem;
+  border: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+.xiami_song .round-img {
+  border-color: orange;
+}
+
+.zanmeishi_song .round-img {
+  border-color: dodgerblue;
 }
 
 /* Forms */
@@ -374,6 +388,38 @@ table th {
 
 .navbar .welcome span {
   margin-right: 0.6rem;
+}
+
+/* 
+* Indices 
+*/
+.index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background-color: burlywood;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.index span {
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+.index:hover span {
+  color: blue;
+}
+
+.index.selected {
+  background-color: rgb(202, 216, 216);
+  cursor: default;
+}
+
+.index.selected span {
+  color: blue;
 }
 
 /* Mobile Styles */
